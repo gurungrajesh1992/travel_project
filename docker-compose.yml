@@ -1,0 +1,63 @@
+services:
+  app:
+    build:
+      context: ./docker/php
+    container_name: travel_tour_app
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - travel_tour
+
+  mysql:
+    image: mysql:8.0
+    container_name: travel_tour_mysql
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_DB_PORT:-3307}:3306"
+    environment:
+      MYSQL_DATABASE: "${DB_DATABASE:-travel_tour}"
+      MYSQL_USER: "${DB_USERNAME:-travel_user}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-secret}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root_secret}"
+    volumes:
+      - travel_tour_dbdata:/var/lib/mysql
+    networks:
+      - travel_tour
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: travel_tour_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_PHPMYADMIN_PORT:-8081}:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: "${DB_ROOT_PASSWORD:-root_secret}"
+    depends_on:
+      - mysql
+    networks:
+      - travel_tour
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: travel_tour_mailpit
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_MAILPIT_PORT:-8025}:8025"
+      - "${FORWARD_MAILPIT_SMTP_PORT:-1025}:1025"
+    networks:
+      - travel_tour
+
+networks:
+  travel_tour:
+    driver: bridge
+
+volumes:
+  travel_tour_dbdata:
+    driver: local

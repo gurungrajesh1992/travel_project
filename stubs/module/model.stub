@@ -1,0 +1,13 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+{{ useParent }}
+
+class {{ class }} extends Model
+{
+    protected $fillable = [{{ fillable }}];
+{{ casts }}
+{{ parentRelations }}
+}

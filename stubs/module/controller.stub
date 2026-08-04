@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Store{{ class }}Request;
+use App\Http\Requests\Admin\Update{{ class }}Request;
+use App\Models\{{ class }};
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class {{ class }}Controller extends Controller
+{
+    public function index(Request $request): View
+    {
+        ${{ variablePlural }} = {{ class }}::query()
+            ->when($request->filled('search'), fn ($q) => $q->where('name', 'like', '%'.$request->string('search').'%'))
+{{ indexOrder }}
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.{{ viewDir }}.index', ['{{ variablePlural }}' => ${{ variablePlural }}]);
+    }
+
+    public function create(): View
+    {
+        return view('admin.{{ viewDir }}.create', [
+{{ formOptionsCreate }}
+        ]);
+    }
+
+    public function store(Store{{ class }}Request $request): RedirectResponse
+    {
+        {{ class }}::create($request->validated());
+
+        return redirect()->route('admin.{{ routeName }}.index')->with('status', '{{ title }} created.');
+    }
+
+    public function edit({{ class }} ${{ variable }}): View
+    {
+        return view('admin.{{ viewDir }}.edit', [
+            '{{ variable }}' => ${{ variable }},
+{{ formOptionsEdit }}
+        ]);
+    }
+
+    public function update(Update{{ class }}Request $request, {{ class }} ${{ variable }}): RedirectResponse
+    {
+        ${{ variable }}->update($request->validated());
+
+        return redirect()->route('admin.{{ routeName }}.index')->with('status', '{{ title }} updated.');
+    }
+
+    public function destroy({{ class }} ${{ variable }}): RedirectResponse
+    {
+        ${{ variable }}->delete();
+
+        return redirect()->route('admin.{{ routeName }}.index')->with('status', '{{ title }} deleted.');
+    }
+}

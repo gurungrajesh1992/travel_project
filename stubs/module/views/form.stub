@@ -1,0 +1,13 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+{{ parentField }}
+    <x-ui.input label="Name" name="name" :value="${{ variable }}->name ?? ''" required class="sm:col-span-2" />
+{{ slugField }}
+{{ descriptionField }}
+{{ sortField }}
+{{ statusField }}
+</div>
+
+<div class="mt-6 flex gap-3">
+    <x-ui.button type="submit">Save</x-ui.button>
+    <x-ui.button as="a" href="{{ route('admin.{{ routeName }}.index') }}" variant="secondary">Cancel</x-ui.button>
+</div>

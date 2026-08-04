@@ -1,0 +1,57 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+
+@theme {
+    --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+
+    /*
+     * Dynamic theme colors. Actual hex values are injected per-request as
+     * runtime CSS custom properties (--tt-*) by the <x-theme-vars> component
+     * (see app/Services/ThemeService.php), scoped to whichever panel
+     * (admin/website/customer) is currently rendering. The fallbacks below
+     * only apply if that component is skipped for some reason.
+     */
+    --color-primary: var(--tt-primary, #2563eb);
+    --color-primary-content: var(--tt-primary-content, #ffffff);
+    --color-secondary: var(--tt-secondary, #0d9488);
+    --color-secondary-content: var(--tt-secondary-content, #ffffff);
+    --color-accent: var(--tt-accent, #f59e0b);
+    --color-accent-content: var(--tt-accent-content, #1f2937);
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+.fc {
+    --fc-button-bg-color: var(--color-primary);
+    --fc-button-border-color: var(--color-primary);
+    --fc-button-hover-bg-color: var(--color-primary);
+    --fc-button-hover-border-color: var(--color-primary);
+    --fc-button-active-bg-color: var(--color-primary);
+    --fc-button-active-border-color: var(--color-primary);
+    --fc-today-bg-color: color-mix(in srgb, var(--color-primary) 10%, white);
+    font-size: 0.875rem;
+}
+
+.fc .fc-button {
+    text-transform: capitalize;
+    box-shadow: none !important;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.fc .fc-event {
+    cursor: pointer;
+    border: none;
+    padding: 1px 4px;
+}
+
+.fc a[href] {
+    text-decoration: none;
+}
