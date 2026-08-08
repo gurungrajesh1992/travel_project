@@ -31,7 +31,7 @@
 
 <div class="bg-white border-b border-gray-100">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col sm:flex-row items-center sm:justify-between gap-3 sm:gap-4">
-        <a href="/" class="flex items-center justify-center w-full sm:w-auto">
+        <a href="{{ route('home') }}" class="flex items-center justify-center w-full sm:w-auto">
             @if ($company->logo)
                 <img src="{{ \Illuminate\Support\Facades\Storage::url($company->logo) }}" alt="{{ $company->name }}" class="h-[60px] w-[230px] object-cover">
             @else
@@ -60,11 +60,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-14">
             <nav class="hidden lg:flex items-center gap-1" x-data="{ open: null }">
-                <a href="/" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Home</a>
+                <a href="{{ route('home') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Home</a>
 
                 @foreach ($navDestinations as $destination)
                     <div class="relative" @mouseenter="open = {{ $destination['id'] }}" @mouseleave="open = null">
-                        <a href="/destinations/{{ $destination['slug'] }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
+                        <a href="{{ route('destinations.show', $destination['slug']) }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
                             {{ $destination['name'] }}
                         </a>
                         @if (! empty($destination['categories']))
@@ -72,7 +72,7 @@
                                  class="absolute left-0 top-full w-60 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-40">
                                 @foreach ($destination['categories'] as $category)
                                     <div class="relative group">
-                                        <a href="/destinations/{{ $destination['slug'] }}/{{ $category['slug'] }}"
+                                        <a href="{{ route('destinations.category', [$destination['slug'], $category['slug']]) }}"
                                            class="flex items-center justify-between px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-primary">
                                             {{ $category['name'] }}
                                             @if (! empty($category['children']))
@@ -85,7 +85,7 @@
                                         @if (! empty($category['children']))
                                             <div class="hidden group-hover:block absolute left-full top-0 w-56 bg-white border border-gray-200 rounded-md shadow-lg py-1">
                                                 @foreach ($category['children'] as $child)
-                                                    <a href="/destinations/{{ $destination['slug'] }}/{{ $child['slug'] }}"
+                                                    <a href="{{ route('destinations.category', [$destination['slug'], $child['slug']]) }}"
                                                        class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-primary">
                                                         {{ $child['name'] }}
                                                     </a>
@@ -100,12 +100,12 @@
                 @endforeach
 
                 <div class="relative" @mouseenter="open = 'multi-country'" @mouseleave="open = null">
-                    <a href="/multi-country" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Multi-Country</a>
+                    <a href="{{ route('destinations.multi-country') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Multi-Country</a>
                     @if (! empty($multiCountryCombos))
                         <div x-show="open === 'multi-country'" x-cloak
                              class="absolute left-0 top-full w-56 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-40">
                             @foreach ($multiCountryCombos as $combo)
-                                <a href="/multi-country?destinations={{ $combo['slugs'] }}"
+                                <a href="{{ route('destinations.multi-country', ['destinations' => $combo['slugs']]) }}"
                                    class="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 hover:text-primary">
                                     {{ $combo['label'] }}
                                 </a>
@@ -116,11 +116,11 @@
                 <span class="px-3 py-2 text-sm font-medium text-gray-400 cursor-not-allowed" title="Coming in phase 2">Hotel</span>
                 <span class="px-3 py-2 text-sm font-medium text-gray-400 cursor-not-allowed" title="Coming in phase 2">Vehicle</span>
                 <a href="{{ route('guides.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Guides</a>
-                <a href="/about-us" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">About</a>
-                <a href="/contact-us" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Contact</a>
-                <a href="/blog" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Blog</a>
-                <a href="/gallery" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Gallery</a>
-                <a href="/faq" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">FAQ</a>
+                <a href="{{ route('pages.about') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">About</a>
+                <a href="{{ route('pages.contact') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Contact</a>
+                <a href="{{ route('blog.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Blog</a>
+                <a href="{{ route('gallery.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Gallery</a>
+                <a href="{{ route('faq.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">FAQ</a>
             </nav>
 
             <div class="flex items-center gap-2 ml-auto">
@@ -171,13 +171,13 @@
 
     <nav x-show="mobileOpen" x-cloak x-data="{ openDestination: null, openCategory: null, openMultiCountry: false }"
          class="lg:hidden absolute inset-x-0 top-full h-screen z-40 bg-white overflow-y-auto px-4 pb-6 pt-3 border-t border-gray-100">
-        <a href="/" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Home</a>
+        <a href="{{ route('home') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Home</a>
 
             @foreach ($navDestinations as $destination)
                 <div>
                     <button @click="openDestination = openDestination === {{ $destination['id'] }} ? null : {{ $destination['id'] }}"
                             class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
-                        <a href="/destinations/{{ $destination['slug'] }}" @click.stop="mobileOpen = false">{{ $destination['name'] }}</a>
+                        <a href="{{ route('destinations.show', $destination['slug']) }}" @click.stop="mobileOpen = false">{{ $destination['name'] }}</a>
                         @if (! empty($destination['categories']))
                             <span x-text="openDestination === {{ $destination['id'] }} ? '−' : '+'"></span>
                         @endif
@@ -188,7 +188,7 @@
                                 <div>
                                     <button @click="openCategory = openCategory === {{ $category['id'] }} ? null : {{ $category['id'] }}"
                                             class="w-full flex items-center justify-between px-3 py-1.5 text-sm text-gray-600 hover:text-primary">
-                                        <a href="/destinations/{{ $destination['slug'] }}/{{ $category['slug'] }}" @click.stop="mobileOpen = false">{{ $category['name'] }}</a>
+                                        <a href="{{ route('destinations.category', [$destination['slug'], $category['slug']]) }}" @click.stop="mobileOpen = false">{{ $category['name'] }}</a>
                                         @if (! empty($category['children']))
                                             <span x-text="openCategory === {{ $category['id'] }} ? '−' : '+'"></span>
                                         @endif
@@ -196,7 +196,7 @@
                                     @if (! empty($category['children']))
                                         <div x-show="openCategory === {{ $category['id'] }}" x-cloak class="pl-4 space-y-1">
                                             @foreach ($category['children'] as $child)
-                                                <a href="/destinations/{{ $destination['slug'] }}/{{ $child['slug'] }}"
+                                                <a href="{{ route('destinations.category', [$destination['slug'], $child['slug']]) }}"
                                                    class="block px-3 py-1 text-sm text-gray-500 hover:text-primary" @click="mobileOpen = false">
                                                     {{ $child['name'] }}
                                                 </a>
@@ -213,7 +213,7 @@
             <div>
                 <button @click="openMultiCountry = ! openMultiCountry"
                         class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
-                    <a href="/multi-country" @click.stop="mobileOpen = false">Multi-Country</a>
+                    <a href="{{ route('destinations.multi-country') }}" @click.stop="mobileOpen = false">Multi-Country</a>
                     @if (! empty($multiCountryCombos))
                         <span x-text="openMultiCountry ? '−' : '+'"></span>
                     @endif
@@ -221,7 +221,7 @@
                 @if (! empty($multiCountryCombos))
                     <div x-show="openMultiCountry" x-cloak class="pl-6 space-y-1">
                         @foreach ($multiCountryCombos as $combo)
-                            <a href="/multi-country?destinations={{ $combo['slugs'] }}"
+                            <a href="{{ route('destinations.multi-country', ['destinations' => $combo['slugs']]) }}"
                                class="block px-3 py-1.5 text-sm text-gray-600 hover:text-primary" @click="mobileOpen = false">
                                 {{ $combo['label'] }}
                             </a>
@@ -232,10 +232,10 @@
             <span class="block px-3 py-2 text-sm font-medium text-gray-400">Hotel <span class="text-xs">(coming soon)</span></span>
             <span class="block px-3 py-2 text-sm font-medium text-gray-400">Vehicle <span class="text-xs">(coming soon)</span></span>
             <a href="{{ route('guides.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Guides</a>
-            <a href="/about-us" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">About</a>
-            <a href="/contact-us" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Contact</a>
-            <a href="/blog" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Blog</a>
-            <a href="/gallery" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Gallery</a>
-            <a href="/faq" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">FAQ</a>
+            <a href="{{ route('pages.about') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">About</a>
+            <a href="{{ route('pages.contact') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Contact</a>
+            <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Blog</a>
+            <a href="{{ route('gallery.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Gallery</a>
+            <a href="{{ route('faq.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">FAQ</a>
     </nav>
 </header>

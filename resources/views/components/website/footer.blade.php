@@ -13,18 +13,18 @@
         <div>
             <p class="text-sm font-semibold uppercase tracking-wide text-white/50">Explore</p>
             <ul class="mt-3 space-y-2 text-sm text-white/80">
-                <li><a href="/multi-country" class="hover:text-white">Multi-Country Tours</a></li>
-                <li><a href="/blog" class="hover:text-white">Blog</a></li>
-                <li><a href="/gallery" class="hover:text-white">Gallery</a></li>
+                <li><a href="{{ route('destinations.multi-country') }}" class="hover:text-white">Multi-Country Tours</a></li>
+                <li><a href="{{ route('blog.index') }}" class="hover:text-white">Blog</a></li>
+                <li><a href="{{ route('gallery.index') }}" class="hover:text-white">Gallery</a></li>
             </ul>
         </div>
 
         <div>
             <p class="text-sm font-semibold uppercase tracking-wide text-white/50">Support</p>
             <ul class="mt-3 space-y-2 text-sm text-white/80">
-                <li><a href="/faq" class="hover:text-white">FAQ</a></li>
-                <li><a href="/contact-us" class="hover:text-white">Contact Us</a></li>
-                <li><a href="/about-us" class="hover:text-white">About Us</a></li>
+                <li><a href="{{ route('faq.index') }}" class="hover:text-white">FAQ</a></li>
+                <li><a href="{{ route('pages.contact') }}" class="hover:text-white">Contact Us</a></li>
+                <li><a href="{{ route('pages.about') }}" class="hover:text-white">About Us</a></li>
             </ul>
         </div>
 
