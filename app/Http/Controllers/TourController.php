@@ -25,6 +25,7 @@ class TourController extends Controller
             ->withOrderedDestinations()
             ->withOrderedCategories()
             ->with('difficulty')
+            ->latest()
             ->paginate(12)
             ->withQueryString();
 

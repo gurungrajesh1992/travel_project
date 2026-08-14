@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BookingController;
@@ -9,8 +11,14 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\DifficultyLevelController;
+use App\Http\Controllers\Admin\FaqCategoryController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\GalleryCategoryController;
+use App\Http\Controllers\Admin\GalleryItemController;
 use App\Http\Controllers\Admin\GuideController;
 use App\Http\Controllers\Admin\InquiryController;
+use App\Http\Controllers\Admin\NewsletterController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ThemeSettingsController;
@@ -108,4 +116,22 @@ Route::middleware(['auth', 'role:admin|staff'])->group(function () {
 
     Route::get('/settings/company', [CompanySettingsController::class, 'edit'])->name('settings.company');
     Route::put('/settings/company', [CompanySettingsController::class, 'update'])->name('settings.company.update');
+
+    Route::resource('blog-categories', BlogCategoryController::class)->except('show');
+    Route::resource('blog-posts', BlogPostController::class)->except('show');
+
+    Route::resource('pages', PageController::class)->except('show');
+
+    Route::resource('gallery-categories', GalleryCategoryController::class)->except('show');
+    Route::resource('gallery-items', GalleryItemController::class)->except('show');
+
+    Route::resource('faq-categories', FaqCategoryController::class)->except('show');
+    Route::resource('faqs', FaqController::class)->except('show');
+
+    Route::prefix('newsletter')->name('newsletter.')->group(function () {
+        Route::get('/', [NewsletterController::class, 'index'])->name('index');
+        Route::get('compose', [NewsletterController::class, 'create'])->name('create');
+        Route::post('send', [NewsletterController::class, 'send'])->name('send');
+        Route::delete('{subscriber}', [NewsletterController::class, 'destroy'])->name('destroy');
+    });
 });

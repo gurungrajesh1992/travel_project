@@ -12,9 +12,9 @@ class HomeController extends Controller
     public function index(): View
     {
         return view('website.home', [
-            'featuredTours' => Tour::published()->where('is_featured', true)->withOrderedDestinations()->withOrderedCategories()->take(6)->get(),
+            'featuredTours' => Tour::published()->where('is_featured', true)->withOrderedDestinations()->withOrderedCategories()->latest()->take(6)->get(),
             'destinations' => Destination::active()->topLevel()->orderBy('sort_order')->get(),
-            'latestPosts' => BlogPost::published()->latest('published_at')->take(3)->get(),
+            'latestPosts' => BlogPost::published()->latest('id')->take(3)->get(),
         ]);
     }
 }
