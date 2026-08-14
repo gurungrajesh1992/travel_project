@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\CompanySetting;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class CompanySettingsController extends Controller
     {
         return view('admin.settings.company', [
             'company' => CompanySetting::current(),
+            'banners' => Banner::orderBy('sort_order')->get(),
         ]);
     }
 
@@ -28,7 +30,6 @@ class CompanySettingsController extends Controller
             'contact_number' => ['nullable', 'string', 'max:30'],
             'logo' => ['nullable', 'image', 'max:1024', 'dimensions:max_width=1000,max_height=1000'],
             'favicon' => ['nullable', 'image', 'max:512', 'dimensions:max_width=512,max_height=512'],
-            'banner_image' => ['nullable', 'image', 'max:4096'],
         ]);
 
         $company = CompanySetting::current();
@@ -49,15 +50,6 @@ class CompanySettingsController extends Controller
             $data['favicon'] = $request->file('favicon')->store('company', 'public');
         } else {
             unset($data['favicon']);
-        }
-
-        if ($request->hasFile('banner_image')) {
-            if ($company->banner_image) {
-                Storage::disk('public')->delete($company->banner_image);
-            }
-            $data['banner_image'] = $request->file('banner_image')->store('company', 'public');
-        } else {
-            unset($data['banner_image']);
         }
 
         $company->update($data);

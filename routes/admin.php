@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogPostController;
 use App\Http\Controllers\Admin\CalendarController;
@@ -116,6 +117,8 @@ Route::middleware(['auth', 'role:admin|staff'])->group(function () {
 
     Route::get('/settings/company', [CompanySettingsController::class, 'edit'])->name('settings.company');
     Route::put('/settings/company', [CompanySettingsController::class, 'update'])->name('settings.company.update');
+    Route::post('/settings/company/banners', [BannerController::class, 'store'])->name('settings.company.banners.store');
+    Route::delete('/settings/company/banners/{banner}', [BannerController::class, 'destroy'])->name('settings.company.banners.destroy');
 
     Route::resource('blog-categories', BlogCategoryController::class)->except('show');
     Route::resource('blog-posts', BlogPostController::class)->except('show');
