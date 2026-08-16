@@ -121,6 +121,7 @@
                 <a href="{{ route('blog.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Blog</a>
                 <a href="{{ route('gallery.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Gallery</a>
                 <a href="{{ route('faq.index') }}" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">FAQ</a>
+                <a href="https://cafe.naver.com/jvillnepal" target="_blank" rel="noopener noreferrer" class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">Naver Cafe</a>
             </nav>
 
             <div class="flex items-center gap-2 ml-auto">
@@ -237,5 +238,6 @@
             <a href="{{ route('blog.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Blog</a>
             <a href="{{ route('gallery.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Gallery</a>
             <a href="{{ route('faq.index') }}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">FAQ</a>
+            <a href="https://cafe.naver.com/jvillnepal" target="_blank" rel="noopener noreferrer" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary" @click="mobileOpen = false">Naver Cafe</a>
     </nav>
 </header>

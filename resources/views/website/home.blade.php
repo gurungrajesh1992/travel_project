@@ -54,23 +54,25 @@
         </section>
     @endif
 
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h2 class="text-xl font-semibold text-gray-900 mb-6">Explore by Destination</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            @foreach ($destinations as $destination)
-                <a href="{{ route('destinations.show', $destination) }}" class="group relative overflow-hidden rounded-lg border border-gray-200 text-center hover:border-primary transition">
-                    @if ($destination->thumbnail)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::url($destination->thumbnail) }}" alt="{{ $destination->name }}"
-                             class="absolute inset-0 h-full w-full object-cover">
-                        <div class="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition"></div>
-                        <p class="relative z-10 flex items-center justify-center h-32 p-6 font-semibold text-white">{{ $destination->name }}</p>
-                    @else
-                        <p class="flex items-center justify-center h-32 p-6 font-semibold group-hover:text-primary transition">{{ $destination->name }}</p>
-                    @endif
-                </a>
-            @endforeach
-        </div>
-    </section>
+    @if ($trekCategories->isNotEmpty())
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Explore Trek</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                @foreach ($trekCategories as $category)
+                    <a href="{{ route('tours.index', ['category' => $category->slug]) }}" class="group relative overflow-hidden rounded-lg border border-gray-200 text-center hover:border-primary transition">
+                        @if ($category->image)
+                            <img src="{{ \Illuminate\Support\Facades\Storage::url($category->image) }}" alt="{{ $category->name }}"
+                                 class="absolute inset-0 h-full w-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition"></div>
+                            <p class="relative z-10 flex items-center justify-center h-32 p-6 font-semibold text-white">{{ $category->name }}</p>
+                        @else
+                            <p class="flex items-center justify-center h-32 p-6 font-semibold group-hover:text-primary transition">{{ $category->name }}</p>
+                        @endif
+                    </a>
+                @endforeach
+            </div>
+        </section>
+    @endif
 
     @if ($featuredTours->isNotEmpty())
         <section class="bg-gray-50 py-12">
@@ -81,6 +83,76 @@
                         <x-website.tour-card :tour="$tour" />
                     @endforeach
                 </div>
+            </div>
+        </section>
+    @endif
+
+    @if ($latestReviews->isNotEmpty())
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6 uppercase tracking-wide">Latest Trip Review</h2>
+
+            <div x-data="{
+                    atStart: true,
+                    atEnd: false,
+                    updateEdges() {
+                        const el = this.$refs.track;
+                        this.atStart = el.scrollLeft <= 4;
+                        this.atEnd = el.scrollLeft >= el.scrollWidth - el.clientWidth - 4;
+                    },
+                    slide(dir) {
+                        const el = this.$refs.track;
+                        const item = el.querySelector('[data-review-item]');
+                        if (!item) return;
+                        const gap = parseFloat(getComputedStyle(el).columnGap || 0);
+                        el.scrollBy({ left: dir * (item.getBoundingClientRect().width + gap), behavior: 'smooth' });
+                    },
+                 }"
+                 x-init="updateEdges()"
+                 class="relative">
+                <div x-ref="track" @scroll.debounce.100ms="updateEdges()"
+                     class="flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    @foreach ($latestReviews as $review)
+                        <div data-review-item class="snap-start shrink-0 w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)]">
+                            <div class="bg-white rounded-lg border border-gray-200 p-5 shadow-sm flex flex-col h-full">
+                                <div class="flex items-center gap-3">
+                                    @if ($review->user?->avatar)
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::url($review->user->avatar) }}"
+                                             alt="{{ $review->reviewer_name }}" class="h-10 w-10 rounded-full object-cover shrink-0">
+                                    @else
+                                        <div class="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold shrink-0">
+                                            {{ strtoupper(substr($review->reviewer_name, 0, 1)) }}
+                                        </div>
+                                    @endif
+                                    <div class="min-w-0">
+                                        <p class="font-semibold text-gray-900 text-sm truncate">{{ $review->reviewer_name }}</p>
+                                        <p class="text-xs text-gray-500 truncate">{{ $review->tour->title }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 text-amber-400 text-sm leading-none" aria-label="{{ $review->rating }} out of 5 stars">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <span>{{ $i <= $review->rating ? '★' : '☆' }}</span>
+                                    @endfor
+                                </div>
+
+                                <p class="mt-2 text-sm text-gray-600 line-clamp-4">{{ $review->review_text }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                @if ($latestReviews->count() > 1)
+                    <button type="button" @click="slide(-1)" :disabled="atStart" aria-label="Previous review"
+                            :class="atStart ? 'opacity-40 cursor-not-allowed' : 'text-gray-600 hover:text-primary hover:border-primary'"
+                            class="absolute -left-4 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center transition">
+                        &#8249;
+                    </button>
+                    <button type="button" @click="slide(1)" :disabled="atEnd" aria-label="Next review"
+                            :class="atEnd ? 'opacity-40 cursor-not-allowed' : 'text-gray-600 hover:text-primary hover:border-primary'"
+                            class="absolute -right-4 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-white border border-gray-200 shadow-sm flex items-center justify-center transition">
+                        &#8250;
+                    </button>
+                @endif
             </div>
         </section>
     @endif

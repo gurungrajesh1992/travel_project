@@ -21,6 +21,7 @@ class CompanySetting extends Model
 
     protected $fillable = [
         'logo', 'favicon', 'name', 'short_detail', 'address', 'email', 'contact_number',
+        'whatsapp_number', 'kakao_url',
     ];
 
     public static function current(): self

@@ -18,6 +18,7 @@ class UpdateCategoryRequest extends FormRequest
             'name' => ['required', 'string', 'max:150'],
             'slug' => ['nullable', 'string', 'max:150', \Illuminate\Validation\Rule::unique('categories', 'slug')->ignore($this->route('category'))],
             'description' => ['nullable', 'string'],
+            'image' => ['nullable', 'image', 'max:2048'],
             'sort_order' => ['nullable', 'integer'],
             'status' => ['required', 'boolean'],
         ];

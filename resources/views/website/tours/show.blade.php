@@ -84,20 +84,41 @@
                         @endif
                     </div>
 
-                    <div x-show="tab === 'itinerary'" x-cloak class="space-y-4">
-                        @forelse ($tour->itineraries as $itinerary)
-                            <div class="border border-gray-200 rounded-lg p-4">
-                                <p class="font-semibold text-gray-900">Day {{ $itinerary->day_number }}: {{ $itinerary->title }}</p>
-                                @if ($itinerary->description)
-                                    <p class="text-sm text-gray-600 mt-1">{{ $itinerary->description }}</p>
-                                @endif
-                                <p class="text-xs text-gray-400 mt-2">
-                                    {{ collect([$itinerary->accommodation, $itinerary->meals, $itinerary->walking_hours ? $itinerary->walking_hours.' walking' : null])->filter()->implode(' · ') }}
-                                </p>
-                            </div>
-                        @empty
+                    <div x-show="tab === 'itinerary'" x-cloak>
+                        @if ($tour->itineraries->isEmpty())
                             <p class="text-sm text-gray-500">Itinerary coming soon.</p>
-                        @endforelse
+                        @else
+                            <x-ui.data-table :headers="['Day', 'Title', 'Accommodation', 'Walking Hrs', 'Description', 'Images']">
+                                @foreach ($tour->itineraries as $itinerary)
+                                    <tr>
+                                        <td class="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap align-top">Day {{ $itinerary->day_number }}</td>
+                                        <td class="px-4 py-3 font-medium text-gray-900 align-top">{{ $itinerary->title }}</td>
+                                        <td class="px-4 py-3 text-gray-600 whitespace-nowrap align-top">{{ $itinerary->accommodation ?? '—' }}</td>
+                                        <td class="px-4 py-3 text-gray-600 whitespace-nowrap align-top">{{ $itinerary->walking_hours ?? '—' }}</td>
+                                        <td class="px-4 py-3 text-gray-600 align-top min-w-[16rem]">
+                                            {{ $itinerary->description ?? '—' }}
+                                        </td>
+                                        <td class="px-4 py-3 align-top">
+                                            @if ($itinerary->media->isNotEmpty())
+                                                <div class="flex gap-1.5 flex-wrap max-w-[10rem]">
+                                                    @foreach ($itinerary->media as $media)
+                                                        @if ($media->file_path)
+                                                            <a href="{{ \Illuminate\Support\Facades\Storage::url($media->file_path) }}" target="_blank" rel="noopener noreferrer">
+                                                                <img src="{{ \Illuminate\Support\Facades\Storage::url($media->file_path) }}"
+                                                                     alt="{{ $media->caption ?? $itinerary->title }}"
+                                                                     class="h-12 w-12 object-cover rounded border border-gray-200 hover:opacity-80 transition">
+                                                            </a>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            @else
+                                                <span class="text-gray-400">—</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </x-ui.data-table>
+                        @endif
                     </div>
 
                     <div x-show="tab === 'map'" x-cloak>

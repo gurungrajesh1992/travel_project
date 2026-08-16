@@ -28,6 +28,8 @@ class CompanySettingsController extends Controller
             'address' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:150'],
             'contact_number' => ['nullable', 'string', 'max:30'],
+            'whatsapp_number' => ['nullable', 'string', 'max:30'],
+            'kakao_url' => ['nullable', 'url', 'max:255'],
             'logo' => ['nullable', 'image', 'max:1024', 'dimensions:max_width=1000,max_height=1000'],
             'favicon' => ['nullable', 'image', 'max:512', 'dimensions:max_width=512,max_height=512'],
         ]);

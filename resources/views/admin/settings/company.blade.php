@@ -39,6 +39,10 @@
                 <x-ui.input label="Address" name="address" :value="$company->address ?? ''" class="sm:col-span-2" />
                 <x-ui.input label="Email" name="email" type="email" :value="$company->email ?? ''" />
                 <x-ui.input label="Contact Number" name="contact_number" :value="$company->contact_number ?? ''" />
+                <x-ui.input label="WhatsApp Number" name="whatsapp_number" :value="$company->whatsapp_number ?? ''"
+                            hint="Include country code, digits only (e.g. 9779841234567). Powers the floating WhatsApp chat button." />
+                <x-ui.input label="KakaoTalk Channel/Chat URL" name="kakao_url" :value="$company->kakao_url ?? ''"
+                             hint="Full link to your KakaoTalk channel or open chat (e.g. https://pf.kakao.com/_yourchannel/chat). Powers the floating KakaoTalk button." class="sm:col-span-2" />
             </div>
         </x-ui.card>
 
