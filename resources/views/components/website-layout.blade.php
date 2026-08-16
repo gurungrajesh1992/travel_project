@@ -34,5 +34,7 @@
     </main>
 
     <x-website.footer />
+
+    <x-website.floating-contacts />
 </body>
 </html>

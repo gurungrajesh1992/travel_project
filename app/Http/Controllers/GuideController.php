@@ -9,7 +9,7 @@ class GuideController extends Controller
 {
     public function index(): View
     {
-        $guides = Guide::active()->orderBy('sort_order')->get();
+        $guides = Guide::active()->latest()->get();
 
         return view('website.guides.index', compact('guides'));
     }

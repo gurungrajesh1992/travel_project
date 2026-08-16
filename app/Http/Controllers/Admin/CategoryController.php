@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
@@ -37,6 +38,12 @@ class CategoryController extends Controller
         $data = $request->validated();
         $data['slug'] = ($data['slug'] ?? '') ?: \Illuminate\Support\Str::slug($data['name']);
 
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('categories', 'public');
+        } else {
+            unset($data['image']);
+        }
+
         Category::create($data);
 
         return redirect()->route('admin.categories.index')->with('status', 'Category created.');
@@ -53,13 +60,28 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, Category $category): RedirectResponse
     {
-        $category->update($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }
+            $data['image'] = $request->file('image')->store('categories', 'public');
+        } else {
+            unset($data['image']);
+        }
+
+        $category->update($data);
 
         return redirect()->route('admin.categories.index')->with('status', 'Category updated.');
     }
 
     public function destroy(Category $category): RedirectResponse
     {
+        if ($category->image) {
+            Storage::disk('public')->delete($category->image);
+        }
+
         $category->delete();
 
         return redirect()->route('admin.categories.index')->with('status', 'Category deleted.');

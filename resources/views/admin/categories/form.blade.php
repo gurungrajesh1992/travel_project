@@ -6,6 +6,16 @@
 
     <x-ui.textarea label="Description" name="description" :value="$category->description ?? ''" class="sm:col-span-2" />
 
+    <div class="sm:col-span-2">
+        <x-input-label for="image" value="Image" />
+        <input type="file" name="image" id="image" accept="image/*" class="mt-1 block w-full text-sm">
+        <p class="mt-1 text-xs text-gray-500">Shown under "Explore Trek" on the website for trek subcategories. Max 2MB.</p>
+        @if (!empty($category?->image))
+            <img src="{{ \Illuminate\Support\Facades\Storage::url($category->image) }}" class="mt-2 h-20 w-32 object-cover rounded border border-gray-200">
+        @endif
+        <x-input-error :messages="$errors->get('image')" class="mt-1" />
+    </div>
+
     <x-ui.input label="Sort Order" name="sort_order" type="number" :value="$category->sort_order ?? 0" />
 
     <div>

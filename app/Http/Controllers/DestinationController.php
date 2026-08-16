@@ -25,6 +25,7 @@ class DestinationController extends Controller
             })
             ->withOrderedDestinations()
             ->withOrderedCategories()
+            ->latest()
             ->paginate(12)
             ->withQueryString();
 
@@ -42,6 +43,7 @@ class DestinationController extends Controller
             ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds))
             ->withOrderedDestinations()
             ->withOrderedCategories()
+            ->latest()
             ->paginate(12)
             ->withQueryString();
 
@@ -78,6 +80,7 @@ class DestinationController extends Controller
             })
             ->withOrderedDestinations()
             ->withOrderedCategories()
+            ->latest()
             ->paginate(12)
             ->withQueryString();
 

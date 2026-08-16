@@ -9,7 +9,7 @@ class BlogController extends Controller
 {
     public function index(): View
     {
-        $posts = BlogPost::published()->with('category')->latest('published_at')->paginate(9);
+        $posts = BlogPost::published()->with('category')->latest('id')->paginate(9);
 
         return view('website.blog.index', compact('posts'));
     }

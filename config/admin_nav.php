@@ -40,11 +40,32 @@ return [
         ['label' => 'Calendar', 'route' => 'admin.calendar.index', 'permission' => 'manage bookings'],
     ],
     'Content' => [
-        ['label' => 'Blog', 'route' => null, 'permission' => 'manage blogs'],
-        ['label' => 'Pages', 'route' => null, 'permission' => 'manage pages'],
-        ['label' => 'Gallery', 'route' => null, 'permission' => 'manage gallery'],
-        ['label' => 'FAQ', 'route' => null, 'permission' => 'manage faqs'],
-        ['label' => 'Newsletter', 'route' => null, 'permission' => 'manage newsletter'],
+        [
+            'label' => 'Blog',
+            'permission' => 'manage blogs',
+            'children' => [
+                ['label' => 'Posts', 'route' => 'admin.blog-posts.index'],
+                ['label' => 'Categories', 'route' => 'admin.blog-categories.index'],
+            ],
+        ],
+        ['label' => 'Pages', 'route' => 'admin.pages.index', 'permission' => 'manage pages'],
+        [
+            'label' => 'Gallery',
+            'permission' => 'manage gallery',
+            'children' => [
+                ['label' => 'Items', 'route' => 'admin.gallery-items.index'],
+                ['label' => 'Categories', 'route' => 'admin.gallery-categories.index'],
+            ],
+        ],
+        [
+            'label' => 'FAQ',
+            'permission' => 'manage faqs',
+            'children' => [
+                ['label' => 'Questions', 'route' => 'admin.faqs.index'],
+                ['label' => 'Categories', 'route' => 'admin.faq-categories.index'],
+            ],
+        ],
+        ['label' => 'Newsletter', 'route' => 'admin.newsletter.index', 'permission' => 'manage newsletter'],
     ],
     'System' => [
         ['label' => 'Customers', 'route' => 'admin.customers.index', 'permission' => 'manage customers'],
