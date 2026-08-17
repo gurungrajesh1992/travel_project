@@ -17,31 +17,31 @@ class TourItineraryController extends Controller
         $data = $request->validate([
             'day_number' => ['required', 'array', 'min:1'],
             'day_number.*' => ['nullable', 'integer', 'min:1'],
-            'title' => ['nullable', 'array'],
-            'title.*' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'array'],
-            'description.*' => ['nullable', 'string'],
-            'accommodation' => ['nullable', 'array'],
-            'accommodation.*' => ['nullable', 'string', 'max:100'],
-            'walking_hours' => ['nullable', 'array'],
-            'walking_hours.*' => ['nullable', 'string', 'max:20'],
+            'area' => ['nullable', 'array'],
+            'area.*' => ['nullable', 'string', 'max:255'],
+            'detail_itinerary' => ['nullable', 'array'],
+            'detail_itinerary.*' => ['nullable', 'string'],
+            'transportation' => ['nullable', 'array'],
+            'transportation.*' => ['nullable', 'string', 'max:100'],
+            'time' => ['nullable', 'array'],
+            'time.*' => ['nullable', 'string', 'max:20'],
         ]);
 
         $added = 0;
 
         foreach ($data['day_number'] as $i => $dayNumber) {
-            $title = $data['title'][$i] ?? null;
+            $area = $data['area'][$i] ?? null;
 
-            if (empty($dayNumber) || trim((string) $title) === '') {
+            if (empty($dayNumber) || trim((string) $area) === '') {
                 continue;
             }
 
             $tour->itineraries()->create([
                 'day_number' => $dayNumber,
-                'title' => $title,
-                'description' => $data['description'][$i] ?? null,
-                'accommodation' => $data['accommodation'][$i] ?? null,
-                'walking_hours' => $data['walking_hours'][$i] ?? null,
+                'area' => $area,
+                'detail_itinerary' => $data['detail_itinerary'][$i] ?? null,
+                'transportation' => $data['transportation'][$i] ?? null,
+                'time' => $data['time'][$i] ?? null,
             ]);
             $added++;
         }

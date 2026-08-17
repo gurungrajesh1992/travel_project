@@ -17,7 +17,13 @@ class HomeController extends Controller
 
         return view('website.home', [
             'banners' => Banner::active()->orderBy('sort_order')->get(),
-            'featuredTours' => Tour::published()->where('is_featured', true)->withOrderedDestinations()->withOrderedCategories()->latest()->take(6)->get(),
+            'featuredTours' => Tour::published()
+                ->whereHas('categories', fn ($q) => $q->where('slug', 'tour'))
+                ->withOrderedDestinations()
+                ->withOrderedCategories()
+                ->latest()
+                ->take(8)
+                ->get(),
             'trekCategories' => $trekParent
                 ? Category::active()
                     ->where('parent_id', $trekParent->id)

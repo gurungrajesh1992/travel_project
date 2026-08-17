@@ -88,28 +88,39 @@
                         @if ($tour->itineraries->isEmpty())
                             <p class="text-sm text-gray-500">Itinerary coming soon.</p>
                         @else
-                            <x-ui.data-table :headers="['Day', 'Title', 'Accommodation', 'Walking Hrs', 'Description', 'Images']">
+                            <x-ui.data-table :headers="['Day', 'Area', 'Transportation', 'Time', 'Detail Itinerary', 'Images']">
                                 @foreach ($tour->itineraries as $itinerary)
                                     <tr>
                                         <td class="px-4 py-3 font-semibold text-gray-900 whitespace-nowrap align-top">Day {{ $itinerary->day_number }}</td>
-                                        <td class="px-4 py-3 font-medium text-gray-900 align-top">{{ $itinerary->title }}</td>
-                                        <td class="px-4 py-3 text-gray-600 whitespace-nowrap align-top">{{ $itinerary->accommodation ?? '—' }}</td>
-                                        <td class="px-4 py-3 text-gray-600 whitespace-nowrap align-top">{{ $itinerary->walking_hours ?? '—' }}</td>
+                                        <td class="px-4 py-3 font-medium text-gray-900 align-top">{{ $itinerary->area }}</td>
+                                        <td class="px-4 py-3 text-gray-600 whitespace-nowrap align-top">{{ $itinerary->transportation ?? '—' }}</td>
+                                        <td class="px-4 py-3 text-gray-600 whitespace-nowrap align-top">{{ $itinerary->time ?? '—' }}</td>
                                         <td class="px-4 py-3 text-gray-600 align-top min-w-[16rem]">
-                                            {{ $itinerary->description ?? '—' }}
+                                            {{ $itinerary->detail_itinerary ?? '—' }}
                                         </td>
                                         <td class="px-4 py-3 align-top">
-                                            @if ($itinerary->media->isNotEmpty())
-                                                <div class="flex gap-1.5 flex-wrap max-w-[10rem]">
-                                                    @foreach ($itinerary->media as $media)
-                                                        @if ($media->file_path)
-                                                            <a href="{{ \Illuminate\Support\Facades\Storage::url($media->file_path) }}" target="_blank" rel="noopener noreferrer">
+                                            @php $itineraryImages = $itinerary->media->filter(fn ($media) => $media->file_path)->values(); @endphp
+                                            @if ($itineraryImages->isNotEmpty())
+                                                <div class="relative w-28" x-data="{ slide: 0, total: {{ $itineraryImages->count() }} }">
+                                                    <div class="h-20 w-28 rounded border border-gray-200 overflow-hidden">
+                                                        @foreach ($itineraryImages as $media)
+                                                            <a href="{{ \Illuminate\Support\Facades\Storage::url($media->file_path) }}" target="_blank" rel="noopener noreferrer"
+                                                               x-show="slide === {{ $loop->index }}" x-cloak class="block h-full w-full">
                                                                 <img src="{{ \Illuminate\Support\Facades\Storage::url($media->file_path) }}"
-                                                                     alt="{{ $media->caption ?? $itinerary->title }}"
-                                                                     class="h-12 w-12 object-cover rounded border border-gray-200 hover:opacity-80 transition">
+                                                                     alt="{{ $media->caption ?? $itinerary->area }}"
+                                                                     class="h-full w-full object-cover">
                                                             </a>
-                                                        @endif
-                                                    @endforeach
+                                                        @endforeach
+                                                    </div>
+                                                    <template x-if="total > 1">
+                                                        <div class="mt-1 flex items-center justify-between">
+                                                            <button type="button" @click="slide = (slide - 1 + total) % total"
+                                                                    class="text-gray-500 hover:text-primary px-1">&lsaquo;</button>
+                                                            <span class="text-xs text-gray-400" x-text="(slide + 1) + ' / ' + total"></span>
+                                                            <button type="button" @click="slide = (slide + 1) % total"
+                                                                    class="text-gray-500 hover:text-primary px-1">&rsaquo;</button>
+                                                        </div>
+                                                    </template>
                                                 </div>
                                             @else
                                                 <span class="text-gray-400">—</span>

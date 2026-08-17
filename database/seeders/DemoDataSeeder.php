@@ -90,11 +90,11 @@ class DemoDataSeeder extends Seeder
             ]);
 
             $days = [
-                ['title' => 'Fly to Lukla, trek to Phakding', 'accommodation' => 'Teahouse', 'meals' => 'B,L,D', 'walking_hours' => '3-4 hrs'],
-                ['title' => 'Trek to Namche Bazaar', 'accommodation' => 'Teahouse', 'meals' => 'B,L,D', 'walking_hours' => '5-6 hrs'],
-                ['title' => 'Acclimatization day in Namche Bazaar', 'accommodation' => 'Teahouse', 'meals' => 'B,L,D', 'walking_hours' => '3 hrs'],
-                ['title' => 'Trek to Tengboche', 'accommodation' => 'Teahouse', 'meals' => 'B,L,D', 'walking_hours' => '5 hrs'],
-                ['title' => 'Trek to Dingboche', 'accommodation' => 'Teahouse', 'meals' => 'B,L,D', 'walking_hours' => '5-6 hrs'],
+                ['area' => 'Fly to Lukla, trek to Phakding', 'transportation' => 'Flight & on foot', 'meals' => 'B,L,D', 'time' => '3-4 hrs'],
+                ['area' => 'Trek to Namche Bazaar', 'transportation' => 'On foot', 'meals' => 'B,L,D', 'time' => '5-6 hrs'],
+                ['area' => 'Acclimatization day in Namche Bazaar', 'transportation' => 'On foot', 'meals' => 'B,L,D', 'time' => '3 hrs'],
+                ['area' => 'Trek to Tengboche', 'transportation' => 'On foot', 'meals' => 'B,L,D', 'time' => '5 hrs'],
+                ['area' => 'Trek to Dingboche', 'transportation' => 'On foot', 'meals' => 'B,L,D', 'time' => '5-6 hrs'],
             ];
 
             foreach ($days as $i => $day) {

@@ -77,8 +77,8 @@
     @if ($featuredTours->isNotEmpty())
         <section class="bg-gray-50 py-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-xl font-semibold text-gray-900 mb-6">Featured Tours</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">Explore Our Tours</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach ($featuredTours as $tour)
                         <x-website.tour-card :tour="$tour" />
                     @endforeach

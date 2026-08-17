@@ -11,8 +11,8 @@ class TourItinerary extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'tour_id', 'destination_id', 'day_number', 'title', 'description',
-        'altitude', 'meals', 'accommodation', 'walking_hours', 'distance_km',
+        'tour_id', 'destination_id', 'day_number', 'area', 'detail_itinerary',
+        'altitude', 'meals', 'transportation', 'time', 'distance_km',
     ];
 
     public function tour(): BelongsTo

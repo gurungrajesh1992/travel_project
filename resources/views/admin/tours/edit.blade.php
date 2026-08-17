@@ -47,17 +47,17 @@
                 @forelse ($tour->itineraries as $itinerary)
                     <div class="border border-gray-200 rounded-md p-4">
                         <div class="flex items-center justify-between">
-                            <p class="font-medium text-sm text-gray-900">Day {{ $itinerary->day_number }}: {{ $itinerary->title }}</p>
+                            <p class="font-medium text-sm text-gray-900">Day {{ $itinerary->day_number }}: {{ $itinerary->area }}</p>
                             <form method="POST" action="{{ route('admin.tours.itineraries.destroy', [$tour, $itinerary]) }}" onsubmit="return confirm('Remove this day?')">
                                 @csrf @method('DELETE')
                                 <button class="text-red-600 hover:underline text-sm">Remove</button>
                             </form>
                         </div>
-                        @if ($itinerary->description)
-                            <p class="text-sm text-gray-600 mt-1">{{ $itinerary->description }}</p>
+                        @if ($itinerary->detail_itinerary)
+                            <p class="text-sm text-gray-600 mt-1">{{ $itinerary->detail_itinerary }}</p>
                         @endif
                         <p class="text-xs text-gray-400 mt-1">
-                            {{ collect([$itinerary->accommodation, $itinerary->meals, $itinerary->walking_hours ? $itinerary->walking_hours.' walking' : null])->filter()->implode(' · ') }}
+                            {{ collect([$itinerary->transportation, $itinerary->meals, $itinerary->time ? $itinerary->time.' time' : null])->filter()->implode(' · ') }}
                         </p>
 
                         <div class="mt-3 flex flex-wrap gap-2">
@@ -83,28 +83,28 @@
             </div>
 
             <form method="POST" action="{{ route('admin.tours.itineraries.store', $tour) }}"
-                  x-data="{ rows: [{ day_number: '', title: '', accommodation: '', walking_hours: '', description: '' }] }" class="space-y-3">
+                  x-data="{ rows: [{ day_number: '', area: '', transportation: '', time: '', detail_itinerary: '' }] }" class="space-y-3">
                 @csrf
                 <template x-for="(row, i) in rows" :key="i">
                     <div class="border border-gray-100 rounded-md p-3 space-y-2">
                         <div class="grid grid-cols-2 sm:grid-cols-6 gap-2">
                             <input type="number" :name="`day_number[${i}]`" x-model="row.day_number" placeholder="Day #"
                                    class="rounded-md border-gray-300 text-sm focus:border-primary focus:ring-primary">
-                            <input type="text" :name="`title[${i}]`" x-model="row.title" placeholder="Title"
+                            <input type="text" :name="`area[${i}]`" x-model="row.area" placeholder="Area"
                                    class="sm:col-span-2 rounded-md border-gray-300 text-sm focus:border-primary focus:ring-primary">
-                            <input type="text" :name="`accommodation[${i}]`" x-model="row.accommodation" placeholder="Accommodation"
+                            <input type="text" :name="`transportation[${i}]`" x-model="row.transportation" placeholder="Transportation"
                                    class="rounded-md border-gray-300 text-sm focus:border-primary focus:ring-primary">
-                            <input type="text" :name="`walking_hours[${i}]`" x-model="row.walking_hours" placeholder="Walking hrs"
+                            <input type="text" :name="`time[${i}]`" x-model="row.time" placeholder="Time"
                                    class="rounded-md border-gray-300 text-sm focus:border-primary focus:ring-primary">
                             <button type="button" @click="rows.splice(i, 1)" x-show="rows.length > 1"
                                     class="text-red-500 hover:text-red-700 text-sm">&times; Remove row</button>
                         </div>
-                        <textarea :name="`description[${i}]`" x-model="row.description" placeholder="Description"
+                        <textarea :name="`detail_itinerary[${i}]`" x-model="row.detail_itinerary" placeholder="Detail Itinerary"
                                   class="w-full rounded-md border-gray-300 text-sm focus:border-primary focus:ring-primary" rows="2"></textarea>
                     </div>
                 </template>
                 <div class="flex items-center gap-3">
-                    <button type="button" @click="rows.push({ day_number: '', title: '', accommodation: '', walking_hours: '', description: '' })"
+                    <button type="button" @click="rows.push({ day_number: '', area: '', transportation: '', time: '', detail_itinerary: '' })"
                             class="text-sm text-primary hover:underline">+ Add another day</button>
                     <x-ui.button size="sm">Save Days</x-ui.button>
                 </div>
